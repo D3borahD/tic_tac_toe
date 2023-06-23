@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* --- COLOR --- */
+$black-primary: #0b0b20;
+$medium-primary: #5858c3;
+$white: #dedee5;
+
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: $black-primary;
+}
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+/*router-outlet {
+  display: none;
+}*/
+
+
