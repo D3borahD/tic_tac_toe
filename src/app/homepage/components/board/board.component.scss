@@ -1,0 +1,11 @@
+
+@import "src/styles";
+
+:host{
+  display: block;
+  height: 300px;
+  width: 300px;
+margin: 5rem auto;
+  background-color: $light-primary;
+}
+
