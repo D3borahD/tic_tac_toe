@@ -1,12 +1,6 @@
-<!--<h2>Current player : {{ currentPlayer }}</h2>-->
-
-<!--
-<app-board [player]="currentPlayer"
-           (newPlayer) = getPlayer($event)
-></app-board>
--->
-
 <h2>Current player : {{ currentPlayer }} </h2>
+
+<h3 *ngIf="winner !==''">Winner is player : {{ winner }}</h3>
 
 <div class="board">
   <div *ngFor="let row of board; let rowIndex = index" class="row">
