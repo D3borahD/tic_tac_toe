@@ -1,0 +1,13 @@
+<h2>Current player : {{ roundPlayer$.getValue() }} </h2>
+
+<h3 *ngIf="winner !==''">Winner is player : {{ winner }}</h3>
+
+<div class="board">
+  <div *ngFor="let row of board; let rowIndex = index" class="row">
+    <div
+      *ngFor="let cell of row; let colIndex = index" class="cell" (click)="addValue(rowIndex, colIndex)">
+      {{ cell }}
+    </div>
+  </div>
+</div>
+<button (click)="resetBoard()">Reset</button>

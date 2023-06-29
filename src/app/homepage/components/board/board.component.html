@@ -1,0 +1,6 @@
+<app-button
+  [currentPlayer]="player"
+  *ngFor="let s of squares"
+  (nextPlayer) = getPlayer($event)
+>
+</app-button>
