@@ -1,6 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, map} from "rxjs";
-
+import {Component, OnInit, Pipe} from '@angular/core';
+import {BehaviorSubject, combineLatest, filter} from "rxjs";
 
 @Component({
   selector: 'app-homepage',
@@ -9,7 +8,13 @@ import {BehaviorSubject, map} from "rxjs";
 })
 export class HomepageComponent implements OnInit {
 
-  public winner:string = ''
+  // création d'un Subject ou BehaviorSubject pour représenter l'état actuel du tour
+  // BehaviorSubject permet d'avoir la valeur au début du jeu
+  public roundPlayer$ = new BehaviorSubject<string>('X')
+  //public winnerPlayer$ = new BehaviorSubject<string>('')
+  public winner = ''
+
+  public action$ = new BehaviorSubject<string>('')
   public value: string | null = null
 
   public board: string[][] = [
@@ -18,16 +23,12 @@ export class HomepageComponent implements OnInit {
     ['', '', '']
   ]
 
-  // création d'un Subject ou BehaviorSubject pour représenter l'état actuel du tour
-  // BehaviorSubject permet d'avoir la valeur au début du jeu
-  public roundPlayer$ = new BehaviorSubject<string>('X')
+
 
   constructor() { }
 
   ngOnInit(): void {
-  /* this.roundPlayer$.subscribe((round) => {
-      console.log(`joueur : ${round}`)
-    })*/
+
   }
 
   // met à jour la variable
@@ -35,6 +36,17 @@ export class HomepageComponent implements OnInit {
     const currentRound = this.roundPlayer$.getValue()
     const nextRound = currentRound === 'X' ? 'O' : 'X'
     this.roundPlayer$.next(nextRound)
+    this.endGame()
+  }
+
+  public endGame():void {
+    this.action$.pipe(
+      filter(() => this.board.every(row => row.every(cell => cell !== '')))
+    ).subscribe(() => {
+        this.resetBoard()
+        this.winner='Personne'
+      }
+    )
   }
 
   public addValue(row: number, cell: number):void {
@@ -78,23 +90,9 @@ export class HomepageComponent implements OnInit {
     ) {
       this.winner = this.roundPlayer$.getValue()
     }
-
     //this.winner = 'nobody'
-
     this.nextRound()
-
   }
-
-
-
-// change player round
-/*  public playerRound():void{
-    if(this.currentPlayer === 'X') {
-      this.currentPlayer= 'O'
-    }else {
-      this.currentPlayer = 'X'
-    }
-  }*/
 
   public resetBoard():void {
      for (let row=0; row<this.board.length; row++){

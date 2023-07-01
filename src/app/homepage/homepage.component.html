@@ -2,10 +2,12 @@
 
 <h3 *ngIf="winner !==''">Winner is player : {{ winner }}</h3>
 
-<div class="board">
+<div class="board light-primary">
   <div *ngFor="let row of board; let rowIndex = index" class="row">
     <div
-      *ngFor="let cell of row; let colIndex = index" class="cell" (click)="addValue(rowIndex, colIndex)">
+      *ngFor="let cell of row; let colIndex = index" class="cell " (click)="addValue(rowIndex, colIndex)"
+      [ngClass]="{green: cell === 'X', blue: cell === 'O'}"
+    >
       {{ cell }}
     </div>
   </div>
