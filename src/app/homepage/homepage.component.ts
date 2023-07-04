@@ -1,5 +1,5 @@
 import {Component, OnInit, Pipe} from '@angular/core';
-import {BehaviorSubject, combineLatest, filter} from "rxjs";
+import {BehaviorSubject, combineLatest, filter, tap} from "rxjs";
 
 @Component({
   selector: 'app-homepage',
@@ -11,11 +11,14 @@ export class HomepageComponent implements OnInit {
   // création d'un Subject ou BehaviorSubject pour représenter l'état actuel du tour
   // BehaviorSubject permet d'avoir la valeur au début du jeu
   public roundPlayer$ = new BehaviorSubject<string>('X')
-  //public winnerPlayer$ = new BehaviorSubject<string>('')
+  public winnerPlayer$ = new BehaviorSubject<string>('')
   public winner = ''
 
   public action$ = new BehaviorSubject<string>('')
   public value: string | null = null
+
+  public scoreX$ = new BehaviorSubject<number>(0);
+  public scoreO$ = new BehaviorSubject<number>(0);
 
   public board: string[][] = [
     ['', '', ''],
@@ -23,11 +26,10 @@ export class HomepageComponent implements OnInit {
     ['', '', '']
   ]
 
-
-
   constructor() { }
 
   ngOnInit(): void {
+
 
   }
 
@@ -37,6 +39,16 @@ export class HomepageComponent implements OnInit {
     const nextRound = currentRound === 'X' ? 'O' : 'X'
     this.roundPlayer$.next(nextRound)
     this.endGame()
+
+    if (this.winnerPlayer$.getValue() === 'O' || this.winnerPlayer$.getValue() === 'X') {
+      if (this.winnerPlayer$.getValue() === 'X') {
+        this.scoreX$.next(this.scoreX$.getValue() + 1);
+        this.resetBoard()
+      } else if (this.winnerPlayer$.getValue() === 'O') {
+        this.scoreO$.next(this.scoreO$.getValue() + 1);
+        this.resetBoard()
+      }
+    }
   }
 
   public endGame():void {
@@ -44,7 +56,7 @@ export class HomepageComponent implements OnInit {
       filter(() => this.board.every(row => row.every(cell => cell !== '')))
     ).subscribe(() => {
         this.resetBoard()
-        this.winner='Personne'
+        this.winnerPlayer$.next('Personne')
       }
     )
   }
@@ -66,7 +78,7 @@ export class HomepageComponent implements OnInit {
       this.board[row][1] === this.roundPlayer$.getValue() &&
       this.board[row][2] === this.roundPlayer$.getValue()
     ) {
-      this.winner = this.roundPlayer$.getValue()
+      this.winnerPlayer$.next(this.roundPlayer$.getValue())
     }
 
     // win a COL
@@ -74,7 +86,7 @@ export class HomepageComponent implements OnInit {
       this.board[1][cell] === this.roundPlayer$.getValue() &&
       this.board[2][cell] === this.roundPlayer$.getValue()
     ) {
-      this.winner = this.roundPlayer$.getValue()
+      this.winnerPlayer$.next(this.roundPlayer$.getValue())
     }
 
     // win a DIAGONAL
@@ -82,15 +94,15 @@ export class HomepageComponent implements OnInit {
       this.board[1][1] === this.roundPlayer$.getValue() &&
       this.board[2][2] === this.roundPlayer$.getValue()
     ) {
-      this.winner = this.roundPlayer$.getValue()
+      this.winnerPlayer$.next(this.roundPlayer$.getValue())
     }
     if (this.board[2][0] === this.roundPlayer$.getValue() &&
       this.board[1][1] === this.roundPlayer$.getValue() &&
       this.board[0][2] === this.roundPlayer$.getValue()
     ) {
-      this.winner = this.roundPlayer$.getValue()
+      this.winnerPlayer$.next(this.roundPlayer$.getValue())
     }
-    //this.winner = 'nobody'
+
     this.nextRound()
   }
 
@@ -99,6 +111,8 @@ export class HomepageComponent implements OnInit {
        this.board[row] = Array(this.board[0].length).fill('')
      }
     this.roundPlayer$.next('X')
-    this.winner=''
+    this.winnerPlayer$.next('')
+
+
   }
 }

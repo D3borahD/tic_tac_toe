@@ -8,11 +8,22 @@
   color: $white;
 }
 h2 {
-  margin-left: 5rem;
+  margin-left: 15rem;
 }
 
 h3 {
   margin-left: 5rem;
+}
+
+table{
+  border-spacing: 1rem;
+  width: auto;
+  margin: auto;
+}
+
+
+tbody {
+  text-align: center;
 }
 
 .board{

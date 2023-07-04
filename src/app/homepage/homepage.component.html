@@ -1,6 +1,24 @@
+
+<table>
+  <thead>
+    <th>Joueur X</th>
+    <th>Joueur O</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{scoreX$.getValue()}}</td>
+      <td>{{scoreO$.getValue()}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
 <h2>Current player : {{ roundPlayer$.getValue() }} </h2>
 
-<h3 *ngIf="winner !==''">Winner is player : {{ winner }}</h3>
+
+
+
+<h3 *ngIf="winnerPlayer$.getValue() !==''">Winner is player : {{ winnerPlayer$.getValue() }}</h3>
 
 <div class="board light-primary">
   <div *ngFor="let row of board; let rowIndex = index" class="row">
@@ -8,7 +26,7 @@
       *ngFor="let cell of row; let colIndex = index" class="cell " (click)="addValue(rowIndex, colIndex)"
       [ngClass]="{green: cell === 'X', blue: cell === 'O'}"
     >
-      {{ cell }}
+        {{ cell }}
     </div>
   </div>
 </div>
